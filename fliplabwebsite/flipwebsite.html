@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flip Lab with Coach Steve · Tumbling Lessons</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#05070d;
+    --surface:#0b1020;
+    --blue:#1e8cff;
+    --blue-light:#63b3ff;
+    --white:#f5f8ff;
+    --muted:#8b97ad;
+    --border:rgba(30,140,255,.22);
+    --card-bg:#101827;
+  }
+
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--white);font-family:'DM Sans',sans-serif;font-weight:300;overflow-x:hidden}
+
+  /* ── NAV ── */
+  nav{
+    position:fixed;top:0;left:0;right:0;z-index:100;
+    display:flex;justify-content:space-between;align-items:center;
+    padding:18px 60px;
+    background:linear-gradient(to bottom,rgba(5,7,13,.96),rgba(5,7,13,.35),transparent);
+    backdrop-filter:blur(6px);
+  }
+  .nav-logo{font-family:'Bebas Neue',sans-serif;line-height:.85;text-decoration:none;letter-spacing:3px}
+  .nav-logo .flip{color:var(--white);font-size:30px}
+  .nav-logo .coach{color:var(--blue);font-size:20px;display:block;letter-spacing:2px}
+  .nav-links{display:flex;gap:30px;list-style:none;align-items:center}
+  .nav-links a{color:rgba(245,248,255,.66);text-decoration:none;font-size:12px;letter-spacing:1.3px;text-transform:uppercase;font-weight:700;transition:.2s}
+  .nav-links a:hover{color:var(--blue-light)}
+  .nav-cta{background:var(--blue);color:#03101f!important;padding:10px 20px;border-radius:4px}
+
+  /* ── HAMBURGER ── */
+  .nav-hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;background:none;border:none;z-index:110}
+  .nav-hamburger span{display:block;width:24px;height:2px;background:var(--white);transition:transform .3s,opacity .3s}
+  .nav-hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+  .nav-hamburger.open span:nth-child(2){opacity:0}
+  .nav-hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+
+  .mobile-menu{
+    display:none;
+    position:fixed;inset:0;z-index:99;
+    background:rgba(5,7,13,.97);
+    flex-direction:column;justify-content:center;align-items:center;gap:32px;
+    backdrop-filter:blur(10px);
+  }
+  .mobile-menu.open{display:flex}
+  .mobile-menu a{color:var(--white);text-decoration:none;font-family:'Bebas Neue',sans-serif;font-size:42px;letter-spacing:4px;transition:color .2s}
+  .mobile-menu a:hover{color:var(--blue)}
+  .mobile-menu .mobile-cta{background:var(--blue);color:#03101f!important;padding:16px 42px;border-radius:4px;font-size:28px}
+
+  /* ── HERO ── */
+  .hero{min-height:100vh;display:flex;align-items:center;position:relative;overflow:hidden;padding:0 60px}
+  .hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 60% 70% at 82% 45%,rgba(30,140,255,.18) 0%,transparent 62%),radial-gradient(ellipse 40% 50% at 20% 85%,rgba(99,179,255,.10) 0%,transparent 54%)}
+  .hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(30,140,255,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(30,140,255,.06) 1px,transparent 1px);background-size:56px 56px;mask-image:radial-gradient(ellipse at center,black 28%,transparent 78%)}
+  .hero-content{position:relative;z-index:1;max-width:740px}
+  .hero-eyebrow{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:3.5px;text-transform:uppercase;color:var(--blue-light);margin-bottom:24px;display:flex;align-items:center;gap:12px}
+  .hero-eyebrow::before{content:'';width:32px;height:1px;background:var(--blue)}
+  .hero-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(66px,10.5vw,136px);line-height:.88;letter-spacing:2px;margin-bottom:28px}
+  .hero-title .accent{color:var(--blue)}
+  .hero-title .small-line{display:block;font-size:.45em;color:var(--blue-light);letter-spacing:4px}
+  .hero-sub{font-size:16px;line-height:1.75;color:rgba(245,248,255,.66);max-width:540px;margin-bottom:42px}
+  .hero-actions{display:flex;gap:14px;flex-wrap:wrap}
+
+  .btn-primary,.btn-ghost,.btn-dark{padding:14px 34px;border-radius:4px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;cursor:pointer;text-decoration:none;transition:.2s;display:inline-block}
+  .btn-primary{background:var(--blue);color:#03101f;border:none}
+  .btn-primary:hover{background:var(--blue-light);transform:translateY(-1px)}
+  .btn-ghost{background:transparent;color:var(--white);border:1px solid rgba(245,248,255,.22)}
+  .btn-ghost:hover{border-color:var(--blue);color:var(--blue-light)}
+  .btn-dark{background:#03101f;color:var(--blue-light);border:none}
+
+  /* Desktop stat cards — absolute positioned right side */
+  .hero-visual{position:absolute;right:60px;top:52%;transform:translateY(-50%);display:flex;flex-direction:column;gap:12px}
+  .stat-card{background:rgba(16,24,39,.92);border:1px solid var(--border);border-left:3px solid var(--blue);padding:17px 24px;min-width:230px;box-shadow:0 20px 60px rgba(0,0,0,.25)}
+  .stat-card:nth-child(2){margin-left:28px}
+  .stat-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:7px}
+  .stat-value{font-family:'Bebas Neue',sans-serif;font-size:35px;color:var(--blue-light);letter-spacing:1px;line-height:1}
+  .stat-sub{font-size:11px;color:rgba(245,248,255,.42);margin-top:5px}
+
+  /* Mobile stat cards — inline below hero content */
+  .hero-stats-mobile{display:none;flex-direction:column;gap:10px;margin-top:40px;position:relative;z-index:1}
+  .hero-stats-mobile .stat-card{min-width:0;width:100%;margin-left:0!important}
+
+  /* ── MARQUEE ── */
+  .marquee-track{overflow:hidden;border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:14px 0;background:rgba(30,140,255,.05)}
+  .marquee-inner{display:flex;animation:marquee 24s linear infinite;width:max-content}
+  .marquee-item{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:3px;color:rgba(245,248,255,.26);white-space:nowrap;display:flex;align-items:center;gap:56px;padding-right:56px}
+  .dot{width:4px;height:4px;border-radius:50%;background:var(--blue);opacity:.75}
+  @keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+  /* ── SECTIONS ── */
+  section{padding:96px 60px;position:relative}
+  #programs,#schedule,#pricing,#payments{background:var(--surface)}
+  .section-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--blue-light);margin-bottom:16px;display:flex;align-items:center;gap:12px}
+  .section-label::before{content:'';width:24px;height:1px;background:var(--blue)}
+  .section-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(42px,6vw,72px);line-height:1;letter-spacing:2px;margin-bottom:16px}
+  .section-sub{font-size:15px;color:rgba(245,248,255,.58);max-width:610px;line-height:1.75}
+
+  .programs-grid,.pricing-grid,.coaches-grid,.payment-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:58px}
+  .program-card,.price-card,.coach-card,.faq-item,.payment-card{background:var(--card-bg);border:1px solid var(--border);padding:36px;transition:border-color .25s,transform .25s}
+  .program-card:hover,.price-card:hover,.coach-card:hover,.payment-card:hover{border-color:rgba(99,179,255,.55);transform:translateY(-2px)}
+  .program-icon{font-size:34px;margin-bottom:20px;display:block}
+  .program-tag{display:inline-block;padding:3px 10px;border:1px solid var(--border);border-radius:3px;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--blue-light);margin-bottom:16px;font-family:'DM Mono',monospace}
+  .program-name,.price-type,.coach-name,.payment-name{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:2px;margin-bottom:10px}
+  .program-desc,.price-desc,.coach-bio,.faq-a,.payment-desc{font-size:13px;color:var(--muted);line-height:1.75}
+  .program-price{font-family:'DM Mono',monospace;font-size:11px;color:var(--blue-light);letter-spacing:1px;margin-top:18px}
+
+  /* ── HOW IT WORKS ── */
+  .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:38px;margin-top:58px}
+  .step-num{font-family:'Bebas Neue',sans-serif;font-size:56px;color:rgba(30,140,255,.20);line-height:1;margin-bottom:14px}
+  .step-title{font-size:16px;font-weight:800;margin-bottom:10px}
+  .step-desc{font-size:13px;color:var(--muted);line-height:1.72}
+
+  /* ── SCHEDULE ── */
+  .schedule-header{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;margin-bottom:40px}
+  .day-tabs{display:flex;gap:4px;background:#05070d;padding:4px;border:1px solid var(--border)}
+  .day-tab{padding:8px 16px;font-size:12px;letter-spacing:1px;text-transform:uppercase;font-weight:700;cursor:pointer;border:none;background:transparent;color:var(--muted);font-family:'DM Mono',monospace}
+  .day-tab.active{background:var(--blue);color:#03101f}
+  .schedule-slots{display:flex;flex-direction:column;gap:2px}
+  .schedule-slot{display:grid;grid-template-columns:120px 1fr auto;align-items:center;gap:24px;padding:18px 24px;background:var(--card-bg);border:1px solid transparent}
+  .slot-time{font-family:'DM Mono',monospace;font-size:13px;color:var(--blue-light)}
+  .slot-name{font-size:15px;font-weight:700}
+  .slot-coach{font-size:12px;color:var(--muted);margin-top:4px}
+  .slot-badge{padding:4px 12px;border-radius:3px;font-size:10px;letter-spacing:1px;text-transform:uppercase;font-weight:800;font-family:'DM Mono',monospace}
+  .badge-open{background:rgba(30,140,255,.16);color:var(--blue-light)}
+  .badge-few{background:rgba(255,255,255,.08);color:var(--white)}
+  .badge-full{background:rgba(255,255,255,.04);color:var(--muted)}
+
+  /* ── COACH CARDS ── */
+  .coach-card{padding:0;overflow:hidden}
+  .coach-photo{height:280px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+
+  /* Styled graphic placeholders instead of emoji */
+  .coach-photo-steve{
+    background:#071828;
+  }
+  .coach-photo-steve::before{ content:none; }
+  .coach-photo-steve::after{ content:none; }
+
+  .coach-photo-mental{
+    background:linear-gradient(135deg,#071020 0%,#0a1a35 50%,#05080f 100%);
+  }
+  .coach-photo-mental::before{
+    content:'';position:absolute;inset:0;
+    background:radial-gradient(ellipse 60% 80% at 30% 60%,rgba(99,179,255,.15),transparent 65%);
+  }
+  .coach-photo-mental::after{
+    content:'MB';
+    font-family:'Bebas Neue',sans-serif;font-size:88px;letter-spacing:6px;
+    color:rgba(99,179,255,.25);position:relative;z-index:1;
+  }
+
+  .coach-photo-technique{
+    background:linear-gradient(135deg,#030810 0%,#081525 50%,#030810 100%);
+  }
+  .coach-photo-technique::before{
+    content:'';position:absolute;inset:0;
+    background:radial-gradient(ellipse 80% 50% at 70% 30%,rgba(30,140,255,.18),transparent 60%);
+  }
+  .coach-photo-technique::after{
+    content:'CT';
+    font-family:'Bebas Neue',sans-serif;font-size:88px;letter-spacing:6px;
+    color:rgba(30,140,255,.28);position:relative;z-index:1;
+  }
+
+  .coach-info{padding:28px}
+  .coach-role{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--blue-light);margin-bottom:12px}
+
+  /* ── REGISTER STRIP ── */
+  .register-strip{background:var(--blue);padding:76px 60px;display:flex;justify-content:space-between;align-items:center;gap:36px;flex-wrap:wrap}
+  .register-strip h2{font-family:'Bebas Neue',sans-serif;font-size:clamp(38px,5vw,66px);color:#03101f;letter-spacing:2px;line-height:1;max-width:700px}
+
+  /* ── PRICING ── */
+  .price-card{position:relative}
+  .price-card.featured{border-color:var(--blue);background:#0d1b2f}
+  .featured-tag{position:absolute;top:-1px;right:24px;background:var(--blue);color:#03101f;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;font-weight:800;padding:4px 12px}
+  .price-rows{display:flex;flex-direction:column;gap:10px;margin-top:28px}
+  .price-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.06)}
+  .price-duration{font-family:'DM Mono',monospace;font-size:12px;color:var(--muted);display:flex;flex-direction:column;gap:3px}.price-duration small{font-size:9px;color:var(--blue-light);letter-spacing:1px;text-transform:uppercase}
+  .price-amount{font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--blue-light);letter-spacing:1px}
+
+  /* ── FAQ ── */
+  .faq-list{margin-top:58px;display:grid;grid-template-columns:1fr 1fr;gap:2px;background:var(--border);border:1px solid var(--border)}
+  .faq-item{border:none}
+  .faq-q{font-size:15px;font-weight:800;margin-bottom:10px}
+
+  /* ── FOOTER ── */
+  footer{background:#03050a;border-top:1px solid var(--border);padding:58px 60px;display:grid;grid-template-columns:2fr 1fr 1fr;gap:60px}
+  .footer-brand{font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:4px;color:var(--white);margin-bottom:12px}
+  .footer-brand span{color:var(--blue);display:block;font-size:25px;letter-spacing:3px}
+  .footer-tagline{font-size:13px;color:var(--muted);line-height:1.65;max-width:340px}
+  .footer-col h4{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--blue-light);margin-bottom:20px}
+  .footer-col ul{list-style:none;display:flex;flex-direction:column;gap:10px}
+  .footer-col a{color:var(--muted);text-decoration:none;font-size:13px}
+  .footer-col a:hover{color:var(--blue-light)}
+  .footer-bottom{background:#03050a;border-top:1px solid var(--border);padding:20px 60px;display:flex;justify-content:space-between;align-items:center;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:1px;color:rgba(245,248,255,.25)}
+
+  /* ── SCROLL ANIMATIONS ── */
+  .fade-up{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease}
+  .fade-up.visible{opacity:1;transform:translateY(0)}
+
+  /* ── RESPONSIVE ── */
+  @media(max-width:900px){
+    nav{padding:15px 22px}
+    .nav-links{display:none}
+    .nav-hamburger{display:flex}
+
+    /* Hero: hide absolute stat cards, show inline ones */
+    .hero{padding:100px 24px 60px;min-height:auto;flex-direction:column;align-items:flex-start}
+    .hero-visual{display:none}
+    .hero-stats-mobile{display:flex}
+    .hero-content{max-width:100%}
+
+    section{padding:62px 24px}
+    .programs-grid,.coaches-grid,.pricing-grid,.steps,.faq-list,.payment-grid{grid-template-columns:1fr}
+    .register-strip{padding:58px 24px}
+    footer{grid-template-columns:1fr;padding:42px 24px;gap:36px}
+    .footer-bottom{padding:16px 24px;flex-direction:column;gap:8px;text-align:center}
+    .schedule-slot{grid-template-columns:82px 1fr auto;gap:12px;padding:16px}
+    .schedule-header{flex-direction:column;align-items:flex-start}
+  }
+</style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav>
+  <a href="#home" class="nav-logo"><span class="flip">FLIP LAB</span><span class="coach">with Coach Steve</span></a>
+  <ul class="nav-links">
+    <li><a href="#programs">Lessons</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#coaches">Coach Steve</a></li>
+    <li><a href="#payments">Pay</a></li>
+    <li><a href="https://script.google.com/macros/s/AKfycbw8rGTG1sSW0uo0h5tW83REJUTQuRndEFJ62mqqBDskYaeH42a-QEppGZdhYkPHtUdBaw/exec" target="_blank" class="nav-cta">Book a Lesson</a></li>
+  </ul>
+  <button class="nav-hamburger" id="hamburger" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- ── MOBILE MENU ── -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#programs" class="mobile-link">Lessons</a>
+  <a href="#pricing" class="mobile-link">Pricing</a>
+  <a href="#coaches" class="mobile-link">Coach Steve</a>
+  <a href="#payments" class="mobile-link">Pay</a>
+  <a href="https://script.google.com/macros/s/AKfycbw8rGTG1sSW0uo0h5tW83REJUTQuRndEFJ62mqqBDskYaeH42a-QEppGZdhYkPHtUdBaw/exec" target="_blank" class="mobile-cta">Book a Lesson</a>
+</div>
+
+<!-- ── HERO ── -->
+<section class="hero" id="home">
+  <video autoplay muted loop playsinline
+    style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;opacity:0.45">
+    <source src="Videos/20260202_205506_1.mp4" type="video/mp4">
+  </video>
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+
+  <div class="hero-content">
+    <div class="hero-eyebrow">Private Tumbling for Cheerleaders & Dancers</div>
+    <h1 class="hero-title">
+      BUILD<br>
+      CONFIDENCE.<br>
+      <span class="accent">FIX TECHNIQUE.</span>
+      <span class="small-line">BREAK MENTAL BLOCKS</span>
+    </h1>
+    <p class="hero-sub">
+      Focused tumbling lessons with Coach Steve for athletes who need confidence, cleaner technique, and real coaching that transfers to performance.
+    </p>
+    <div class="hero-actions">
+      <a href="https://script.google.com/macros/s/AKfycbw8rGTG1sSW0uo0h5tW83REJUTQuRndEFJ62mqqBDskYaeH42a-QEppGZdhYkPHtUdBaw/exec" target="_blank" class="btn-primary">Book a Lesson</a>
+      <a href="sms:+15134432674" class="btn-ghost">Text Coach Steve</a>
+    </div>
+
+    <!-- Mobile stat cards (inline, below CTAs) -->
+    <div class="hero-stats-mobile">
+      <div class="stat-card">
+        <div class="stat-label">Coaching Focus</div>
+        <div class="stat-value">Confidence</div>
+        <div class="stat-sub">Mental blocks · technique · progress</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Lesson Style</div>
+        <div class="stat-value">1–3 Athletes</div>
+        <div class="stat-sub">Private · shared · small group</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Location</div>
+        <div class="stat-value">Cincy Area</div>
+        <div class="stat-sub">Cincinnati / Loveland area</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Desktop stat cards (absolute right) -->
+  <div class="hero-visual">
+    <div class="stat-card">
+      <div class="stat-label">Coaching Focus</div>
+      <div class="stat-value">Confidence</div>
+      <div class="stat-sub">Mental blocks · technique · progress</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Lesson Style</div>
+      <div class="stat-value">1–3 Athletes</div>
+      <div class="stat-sub">Private · shared · small group</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Location</div>
+      <div class="stat-value">Cincy Area</div>
+      <div class="stat-sub">Cincinnati / Loveland area</div>
+    </div>
+  </div>
+</section>
+
+<div class="marquee-track">
+  <div class="marquee-inner">
+    <div class="marquee-item">
+      Mental Blocks <span class="dot"></span> Confidence <span class="dot"></span> Clean Technique <span class="dot"></span> Back Handsprings <span class="dot"></span> Aerials <span class="dot"></span> Hard Floor Tumbling <span class="dot"></span> Cheer & Dance <span class="dot"></span> Real Feedback <span class="dot"></span>
+      Mental Blocks <span class="dot"></span> Confidence <span class="dot"></span> Clean Technique <span class="dot"></span> Back Handsprings <span class="dot"></span> Aerials <span class="dot"></span> Hard Floor Tumbling <span class="dot"></span> Cheer & Dance <span class="dot"></span> Real Feedback
+    </div>
+  </div>
+</div>
+
+<!-- ── PROGRAMS ── -->
+<section id="programs">
+  <div class="fade-up">
+    <div class="section-label">Lesson Options</div>
+    <h2 class="section-title">CHOOSE THE<br>RIGHT FIT</h2>
+    <p class="section-sub">Simple options for athletes who need one-on-one attention, want to train with a friend, or prefer a small group lesson.</p>
+  </div>
+
+  <div class="programs-grid fade-up">
+    <div class="program-card">
+      <span class="program-icon">🤸</span>
+      <span class="program-tag">1 Athlete</span>
+      <div class="program-name">Private Lesson</div>
+      <div class="program-desc">Best for focused corrections, confidence building, mental block support, or skill-specific technique work.</div>
+      <div class="program-price">From $40 · 30 minutes</div>
+    </div>
+    <div class="program-card">
+      <span class="program-icon">👯</span>
+      <span class="program-tag">2 Athletes</span>
+      <div class="program-name">Shared Lesson</div>
+      <div class="program-desc">Great for friends or siblings with similar age and skill level. Athletes still get direct feedback and strong reps.</div>
+      <div class="program-price">From $30 each · 30 minutes</div>
+    </div>
+    <div class="program-card">
+      <span class="program-icon">⭐</span>
+      <span class="program-tag">3 Athletes</span>
+      <div class="program-name">Small Group Lesson</div>
+      <div class="program-desc">A value option when three athletes are close in level. Small enough to keep coaching quality high.</div>
+      <div class="program-price">From $25 each · 30 minutes</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── HOW IT WORKS ── -->
+<section id="how">
+  <div class="fade-up">
+    <div class="section-label">How It Works</div>
+    <h2 class="section-title">SIMPLE FOR<br>PARENTS</h2>
+    <p class="section-sub">No confusing membership language. Parents can book, text, or check the portal from one clean website.</p>
+  </div>
+
+  <div class="steps">
+    <div class="step fade-up">
+      <div class="step-num">01</div>
+      <div class="step-title">Book or Text</div>
+      <div class="step-desc">Use the booking button to enter the parent portal, or text Coach Steve with questions.</div>
+    </div>
+    <div class="step fade-up">
+      <div class="step-num">02</div>
+      <div class="step-title">Choose Lesson Type</div>
+      <div class="step-desc">Private, shared, or small group depending on your athlete's needs and skill level.</div>
+    </div>
+    <div class="step fade-up">
+      <div class="step-num">03</div>
+      <div class="step-title">Train With Purpose</div>
+      <div class="step-desc">Lessons focus on confidence, technique, safe progressions, and clear corrections.</div>
+    </div>
+    <div class="step fade-up">
+      <div class="step-num">04</div>
+      <div class="step-title">Build Confidence</div>
+      <div class="step-desc">The goal is progress your athlete can feel — mentally and physically.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── SCHEDULE ── -->
+<section id="schedule">
+  <div class="schedule-header fade-up">
+    <div>
+      <div class="section-label">Live Availability</div>
+      <h2 class="section-title">CURRENT<br>OPENINGS</h2>
+      <p class="section-sub">
+        These openings load directly from Coach Steve's live schedule.
+        If you do not see a time that works, text Coach Steve to ask.
+      </p>
+    </div>
+    <div class="hero-actions">
+      <a href="https://script.google.com/macros/s/AKfycbw8rGTG1sSW0uo0h5tW83REJUTQuRndEFJ62mqqBDskYaeH42a-QEppGZdhYkPHtUdBaw/exec" target="_blank" class="btn-primary">Book a Lesson</a>
+      <a href="sms:+15134432674" class="btn-ghost">Text Coach Steve</a>
+    </div>
+  </div>
+
+  <div id="schedule-slots" class="schedule-slots fade-up">
+    <div class="schedule-slot">
+      <div class="slot-time">Loading</div>
+      <div class="slot-info">
+        <div class="slot-name">Checking live openings...</div>
+        <div class="slot-coach">Coach Steve</div>
+      </div>
+      <span class="slot-badge badge-open">LIVE</span>
+    </div>
+  </div>
+</section>
+
+<!-- ── COACH STEVE ── -->
+<section id="coaches">
+  <div class="fade-up">
+    <div class="section-label">Coach</div>
+    <h2 class="section-title">MEET<br>COACH STEVE</h2>
+    <p class="section-sub">Coach Steve works with cheerleaders and dancers who want strong technique, safer tumbling, and confidence that carries into performance.</p>
+  </div>
+
+  <div class="coaches-grid fade-up">
+    <div class="coach-card">
+      <div class="coach-photo coach-photo-steve" style="padding:0;overflow:hidden">
+<img src="images/FB_IMG_1776999427252.jpg" alt="Coach Steve" style="width:100%;height:100%;object-fit:contain;display:block;object-position:center">
+</div>
+      <div class="coach-info">
+        <div class="coach-name">Coach Steve</div>
+        <div class="coach-role">Owner · Flip Lab Tumbling</div>
+        <div class="coach-bio">With 10+ years of coaching experience and a background as a former acro gymnast, Coach Steve helps athletes improve technique, work through mental blocks, and build skills safely.</div>
+      </div>
+    </div>
+    <div class="coach-card">
+      <div class="coach-photo coach-photo-mental"></div>
+      <div class="coach-info">
+        <div class="coach-name">Mental Blocks</div>
+        <div class="coach-role">Confidence-Based Coaching</div>
+        <div class="coach-bio">Athletes need more than drills. Flip Lab focuses on trust, progressions, and rebuilding confidence one correction at a time.</div>
+      </div>
+    </div>
+    <div class="coach-card">
+      <div class="coach-photo coach-photo-technique"></div>
+      <div class="coach-info">
+        <div class="coach-name">Clean Technique</div>
+        <div class="coach-role">Safer Progress</div>
+        <div class="coach-bio">Lessons focus on better shapes, timing, power, and control so skills transfer better to cheer and dance surfaces.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── REGISTER STRIP ── -->
+<div class="register-strip fade-up">
+  <h2>READY TO BOOK A LESSON WITH COACH STEVE?</h2>
+  <a href="https://script.google.com/macros/s/AKfycbw8rGTG1sSW0uo0h5tW83REJUTQuRndEFJ62mqqBDskYaeH42a-QEppGZdhYkPHtUdBaw/exec" target="_blank" class="btn-dark">Book a Lesson →</a>
+</div>
+
+<!-- ── PRICING ── -->
+<section id="pricing">
+  <div class="fade-up">
+    <div class="section-label">Rates</div>
+    <h2 class="section-title">CLEAR<br>PRICING</h2>
+    <p class="section-sub">Most sessions are 30 minutes. Extended sessions available upon request, based on availability. Groups should be similar age and skill level.</p>
+  </div>
+
+  <div class="pricing-grid fade-up">
+    <div class="price-card">
+      <div class="price-type">Private</div>
+      <div class="price-desc">1 athlete with Coach Steve</div>
+      <div class="price-rows">
+        <div class="price-row"><span class="price-duration">30 min</span><span class="price-amount">$40</span></div>
+        <div class="price-row"><span class="price-duration">45 min <small>upon request</small></span><span class="price-amount">$60</span></div>
+        <div class="price-row"><span class="price-duration">60 min <small>upon request</small></span><span class="price-amount">$80</span></div>
+      </div>
+    </div>
+    <div class="price-card featured">
+      <div class="featured-tag">Great Value</div>
+      <div class="price-type">Shared</div>
+      <div class="price-desc">2 athletes — price per athlete</div>
+      <div class="price-rows">
+        <div class="price-row"><span class="price-duration">30 min</span><span class="price-amount">$30</span></div>
+        <div class="price-row"><span class="price-duration">45 min <small>upon request</small></span><span class="price-amount">$45</span></div>
+        <div class="price-row"><span class="price-duration">60 min <small>upon request</small></span><span class="price-amount">$60</span></div>
+      </div>
+    </div>
+    <div class="price-card">
+      <div class="price-type">Small Group</div>
+      <div class="price-desc">3 athletes — price per athlete</div>
+      <div class="price-rows">
+        <div class="price-row"><span class="price-duration">30 min</span><span class="price-amount">$25</span></div>
+        <div class="price-row"><span class="price-duration">45 min <small>upon request</small></span><span class="price-amount">$35</span></div>
+        <div class="price-row"><span class="price-duration">60 min <small>upon request</small></span><span class="price-amount">$45</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── PAYMENTS ── -->
+<section id="payments">
+  <div class="fade-up">
+    <div class="section-label">Payments</div>
+    <h2 class="section-title">PAYMENT<br>OPTIONS</h2>
+    <p class="section-sub">Parents can pay through Venmo or Zelle. Please include the athlete name and lesson date in the payment note.</p>
+  </div>
+
+  <div class="payment-grid fade-up">
+    <a href="https://venmo.com/code?user_id=2634245503713280412&created=1778007886" target="_blank" class="payment-card" style="text-decoration:none;color:inherit">
+      <div class="payment-name">Venmo</div>
+      <div class="payment-desc">Tap to open Venmo payment / QR link.</div>
+      <div class="program-price">Open Venmo →</div>
+    </a>
+    <div class="payment-card">
+      <div class="payment-name">Zelle</div>
+      <div class="payment-desc">Use this number for Zelle payments.</div>
+      <div class="program-price">951-317-5158</div>
+    </div>
+    <a href="sms:+15134432674" class="payment-card" style="text-decoration:none;color:inherit">
+      <div class="payment-name">Questions?</div>
+      <div class="payment-desc">Text Coach Steve if you are unsure what to pay or need help booking.</div>
+      <div class="program-price">(513) 443-2674</div>
+    </a>
+  </div>
+</section>
+
+<!-- ── FAQ ── -->
+<section id="faq">
+  <div class="fade-up">
+    <div class="section-label">Parents Ask</div>
+    <h2 class="section-title">COMMON<br>QUESTIONS</h2>
+  </div>
+
+  <div class="faq-list fade-up">
+    <div class="faq-item">
+      <div class="faq-q">Do you work with cheerleaders and dancers?</div>
+      <div class="faq-a">Yes. Flip Lab focuses heavily on tumbling for cheer and dance athletes, especially confidence and clean technique.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Can my athlete train with a friend?</div>
+      <div class="faq-a">Yes. Shared and small group lessons are available when athletes are similar in age and skill level.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">What if my athlete has a mental block?</div>
+      <div class="faq-a">Coach Steve works with athletes physically and mentally, using progressions that rebuild trust and confidence.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Are Saturdays available?</div>
+      <div class="faq-a">Saturdays are unavailable. Communication is generally available 8 AM–5 PM.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div>
+    <div class="footer-brand">FLIP LAB <span>with Coach Steve</span></div>
+    <div class="footer-tagline">Private and small group tumbling lessons for cheerleaders and dancers in the Cincinnati / Loveland area.</div>
+  </div>
+  <div class="footer-col">
+    <h4>Actions</h4>
+    <ul>
+      <li><a href="https://script.google.com/macros/s/AKfycbw8rGTG1sSW0uo0h5tW83REJUTQuRndEFJ62mqqBDskYaeH42a-QEppGZdhYkPHtUdBaw/exec" target="_blank">Book a Lesson</a></li>
+      <li><a href="sms:+15134432674">Text Coach Steve</a></li>
+      <li><a href="https://venmo.com/code?user_id=2634245503713280412&created=1778007886" target="_blank">Pay Venmo</a></li>
+    </ul>
+  </div>
+  <div class="footer-col">
+    <h4>Social</h4>
+    <ul>
+      <li><a href="https://www.instagram.com/fliplab.with.coach.steve" target="_blank">Instagram</a></li>
+      <li><a href="https://www.facebook.com/share/17i9N9k4op/" target="_blank">Facebook</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+    </ul>
+  </div>
+</footer>
+
+<div class="footer-bottom">
+  <span>© 2026 FLIP LAB WITH COACH STEVE</span>
+  <span>MENTAL BLOCKS · CONFIDENCE · TECHNIQUE</span>
+</div>
+
+<script>
+  // ── HAMBURGER MENU ──
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+
+  hamburger.addEventListener('click', () => {
+    const isOpen = mobileMenu.classList.toggle('open');
+    hamburger.classList.toggle('open', isOpen);
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+  });
+
+  // Close mobile menu when any link is tapped
+  mobileMenu.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      mobileMenu.classList.remove('open');
+      hamburger.classList.remove('open');
+      document.body.style.overflow = '';
+    });
+  });
+
+  // ── SCROLL ANIMATIONS ──
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.12 });
+
+  function observeFadeUps() {
+    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+  }
+  observeFadeUps();
+
+  // ── OPENINGS / SCHEDULE ──
+  const OPENINGS_API = "https://script.google.com/macros/s/AKfycbw8rGTG1sSW0uo0h5tW83REJUTQuRndEFJ62mqqBDskYaeH42a-QEppGZdhYkPHtUdBaw/exec?action=openings";
+  const CACHE_KEY = "fliplab_openings_v1";
+  const CACHE_TTL_MS = 5 * 60 * 1000;
+  const PORTAL_BASE = "https://script.google.com/macros/s/AKfycbw8rGTG1sSW0uo0h5tW83REJUTQuRndEFJ62mqqBDskYaeH42a-QEppGZdhYkPHtUdBaw/exec";
+
+  function escapeHtml(str) {
+    return String(str || "")
+      .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
+      .replace(/"/g,"&quot;").replace(/'/g,"&#39;");
+  }
+
+  function buildPortalLink(slot) {
+    const params = new URLSearchParams({ slotDay: slot.day || "", slotTime: slot.time || "", slotType: "private" });
+    return PORTAL_BASE + "?" + params.toString();
+  }
+
+  function renderEmpty(container) {
+    container.innerHTML = `
+      <div class="schedule-slot">
+        <div class="slot-time">—</div>
+        <div class="slot-info">
+          <div class="slot-name">No current openings listed</div>
+          <div class="slot-coach">Text Coach Steve for availability</div>
+        </div>
+        <span class="slot-badge badge-full">FULL</span>
+      </div>`;
+  }
+
+  function renderError(container) {
+    container.innerHTML = `
+      <div class="schedule-slot">
+        <div class="slot-time">—</div>
+        <div class="slot-info">
+          <div class="slot-name">Couldn't load openings</div>
+          <div class="slot-coach">Please text Coach Steve</div>
+        </div>
+        <a href="sms:+15134432674" class="slot-badge badge-open" style="text-decoration:none">TEXT</a>
+      </div>`;
+  }
+
+  function renderSlots(container, openings) {
+    container.innerHTML = openings.map(slot => {
+      const day = escapeHtml(slot.day);
+      const time = escapeHtml(slot.time);
+      const status = escapeHtml(slot.status || "Open").toUpperCase();
+      const portalLink = buildPortalLink(slot);
+      return `
+        <a href="${portalLink}" target="_blank" rel="noopener" class="schedule-slot" style="text-decoration:none;color:inherit;cursor:pointer">
+          <div class="slot-time">${time}</div>
+          <div class="slot-info">
+            <div class="slot-name">${day} · Private Lesson</div>
+            <div class="slot-coach">Coach Steve · tap to book this slot</div>
+          </div>
+          <span class="slot-badge badge-open">${status}</span>
+        </a>`;
+    }).join("");
+    // Re-observe newly rendered slots for fade-up
+    observeFadeUps();
+  }
+
+  async function loadOpenings() {
+    const container = document.getElementById("schedule-slots");
+    if (!container) return;
+
+    try {
+      const cached = JSON.parse(sessionStorage.getItem(CACHE_KEY) || "null");
+      if (cached && (Date.now() - cached.t) < CACHE_TTL_MS && Array.isArray(cached.openings)) {
+        cached.openings.length ? renderSlots(container, cached.openings) : renderEmpty(container);
+        return;
+      }
+    } catch (_) {}
+
+    try {
+      const response = await fetch(OPENINGS_API, { cache: "no-store" });
+      const data = await response.json();
+      if (!data.success || !Array.isArray(data.openings) || !data.openings.length) {
+        renderEmpty(container);
+        try { sessionStorage.setItem(CACHE_KEY, JSON.stringify({ t: Date.now(), openings: [] })); } catch (_) {}
+        return;
+      }
+      renderSlots(container, data.openings);
+      try { sessionStorage.setItem(CACHE_KEY, JSON.stringify({ t: Date.now(), openings: data.openings })); } catch (_) {}
+    } catch (err) {
+      renderError(container);
+      console.error("loadOpenings failed:", err);
+    }
+  }
+
+  loadOpenings();
+</script>
+</body>
+</html>
