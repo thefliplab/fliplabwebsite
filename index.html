@@ -133,45 +133,23 @@
   .badge-few{background:rgba(255,255,255,.08);color:var(--white)}
   .badge-full{background:rgba(255,255,255,.04);color:var(--muted)}
 
-  /* ── COACH CARDS ── */
-  .coach-card{padding:0;overflow:hidden}
-  .coach-photo{height:280px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
-
-  /* Styled graphic placeholders instead of emoji */
-  .coach-photo-steve{
-    background:#071828;
+  /* ── COACH STEVE ── */
+  .coach-wrap{display:grid;grid-template-columns:minmax(260px,420px) 1fr;gap:64px;align-items:center}
+  .coach-img{position:relative;z-index:0}
+  .coach-img img{width:100%;display:block;aspect-ratio:706/808;object-fit:cover;border:1px solid var(--border)}
+  .coach-img::after{content:'';position:absolute;inset:18px -18px -18px 18px;border:1px solid var(--blue);z-index:-1}
+  .coach-story p{font-size:15px;line-height:1.8;color:rgba(245,248,255,.72);margin-bottom:16px;max-width:600px}
+  .creds{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:30px 0 34px;max-width:600px}
+  .cred{background:var(--card-bg);border:1px solid var(--border);border-left:3px solid var(--blue);padding:16px}
+  .cred-num{font-family:'Bebas Neue',sans-serif;font-size:34px;color:var(--blue-light);line-height:1}
+  .cred-num.small{font-size:20px}
+  .cred-txt{font-size:11px;color:var(--muted);margin-top:6px;line-height:1.4}
+  .focus{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:30px}
+  .focus span{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--blue-light);border:1px solid var(--border);padding:6px 12px;border-radius:3px}
+  @media(max-width:900px){
+    .coach-wrap{grid-template-columns:1fr;gap:40px}
+    .coach-img{max-width:380px}
   }
-  .coach-photo-steve::before{ content:none; }
-  .coach-photo-steve::after{ content:none; }
-
-  .coach-photo-mental{
-    background:linear-gradient(135deg,#071020 0%,#0a1a35 50%,#05080f 100%);
-  }
-  .coach-photo-mental::before{
-    content:'';position:absolute;inset:0;
-    background:radial-gradient(ellipse 60% 80% at 30% 60%,rgba(99,179,255,.15),transparent 65%);
-  }
-  .coach-photo-mental::after{
-    content:'MB';
-    font-family:'Bebas Neue',sans-serif;font-size:88px;letter-spacing:6px;
-    color:rgba(99,179,255,.25);position:relative;z-index:1;
-  }
-
-  .coach-photo-technique{
-    background:linear-gradient(135deg,#030810 0%,#081525 50%,#030810 100%);
-  }
-  .coach-photo-technique::before{
-    content:'';position:absolute;inset:0;
-    background:radial-gradient(ellipse 80% 50% at 70% 30%,rgba(30,140,255,.18),transparent 60%);
-  }
-  .coach-photo-technique::after{
-    content:'CT';
-    font-family:'Bebas Neue',sans-serif;font-size:88px;letter-spacing:6px;
-    color:rgba(30,140,255,.28);position:relative;z-index:1;
-  }
-
-  .coach-info{padding:28px}
-  .coach-role{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--blue-light);margin-bottom:12px}
 
   /* ── REGISTER STRIP ── */
   .register-strip{background:var(--blue);padding:76px 60px;display:flex;justify-content:space-between;align-items:center;gap:36px;flex-wrap:wrap}
@@ -424,38 +402,20 @@
 
 <!-- ── COACH STEVE ── -->
 <section id="coaches">
-  <div class="fade-up">
-    <div class="section-label">Coach</div>
-    <h2 class="section-title">MEET<br>COACH STEVE</h2>
-    <p class="section-sub">Coach Steve works with cheerleaders and dancers who want strong technique, safer tumbling, and confidence that carries into performance.</p>
-  </div>
-
-  <div class="coaches-grid fade-up">
-    <div class="coach-card">
-      <div class="coach-photo coach-photo-steve" style="padding:0;overflow:hidden">
-<div class="coach-photo coach-photo-steve" style="padding:0;overflow:hidden"> <img src="images/Coachsteve.jpg" alt="Coach Steve" style="width:100%;height:100%;object-fit:contain;display:block;object-position:center"> </div>
-</div>
-      <div class="coach-info">
-        <div class="coach-name">Coach Steve</div>
-        <div class="coach-role">Owner · Flip Lab Tumbling</div>
-        <div class="coach-bio">With 10+ years of coaching experience and a background as a former acro gymnast, Coach Steve helps athletes improve technique, work through mental blocks, and build skills safely.</div>
+  <div class="coach-wrap fade-up">
+    <div class="coach-img"><img src="images/Coachsteve.jpg" alt="Coach Steve"></div>
+    <div class="coach-story">
+      <div class="section-label">Your Coach</div>
+      <h2 class="section-title">MEET<br>COACH STEVE</h2>
+      <p>Former acro gymnast with 11 years of coaching. I work with cheerleaders, dancers, and gymnasts who are stuck, scared, or just not getting the clean skill they want.</p>
+      <p>Most athletes don't need more reps. They need the right progression and someone who can explain <em>why</em> a skill isn't working. That's what every lesson is built around.</p>
+      <div class="creds">
+        <div class="cred"><div class="cred-num">11</div><div class="cred-txt">Years coaching</div></div>
+        <div class="cred"><div class="cred-num small">CHEER, DANCE, GYMNASTICS</div><div class="cred-txt">Specializing in technique and mental blocks to improve your tumbling</div></div>
+        <div class="cred"><div class="cred-num small">ALL LEVELS</div><div class="cred-txt">From first cartwheel to full twisting layouts</div></div>
       </div>
-    </div>
-    <div class="coach-card">
-      <div class="coach-photo coach-photo-mental"></div>
-      <div class="coach-info">
-        <div class="coach-name">Mental Blocks</div>
-        <div class="coach-role">Confidence-Based Coaching</div>
-        <div class="coach-bio">Athletes need more than drills. Flip Lab focuses on trust, progressions, and rebuilding confidence one correction at a time.</div>
-      </div>
-    </div>
-    <div class="coach-card">
-      <div class="coach-photo coach-photo-technique"></div>
-      <div class="coach-info">
-        <div class="coach-name">Clean Technique</div>
-        <div class="coach-role">Safer Progress</div>
-        <div class="coach-bio">Lessons focus on better shapes, timing, power, and control so skills transfer better to cheer and dance surfaces.</div>
-      </div>
+      <div class="focus"><span>Mental blocks</span><span>Back handsprings</span><span>Tucks &amp; layouts</span><span>Hard-floor tumbling</span></div>
+      <a href="https://script.google.com/macros/s/AKfycbw8rGTG1sSW0uo0h5tW83REJUTQuRndEFJ62mqqBDskYaeH42a-QEppGZdhYkPHtUdBaw/exec" target="_blank" class="btn-primary">Book with Coach Steve</a>
     </div>
   </div>
 </section>
