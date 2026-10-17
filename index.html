@@ -97,7 +97,7 @@
 
   /* ── SECTIONS ── */
   section{padding:96px 60px;position:relative}
-  #programs,#schedule,#location,#pricing,#payments{background:var(--surface)}
+  #programs,#schedule,#location,#payments{background:var(--surface)}
   .section-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--blue-light);margin-bottom:16px;display:flex;align-items:center;gap:12px}
   .section-label::before{content:'';width:24px;height:1px;background:var(--blue)}
   .section-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(42px,6vw,72px);line-height:1;letter-spacing:2px;margin-bottom:16px}
@@ -180,6 +180,12 @@
   .price-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.06)}
   .price-duration{font-family:'DM Mono',monospace;font-size:12px;color:var(--muted);display:flex;flex-direction:column;gap:3px}.price-duration small{font-size:9px;color:var(--blue-light);letter-spacing:1px;text-transform:uppercase}
   .price-amount{font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--blue-light);letter-spacing:1px}
+
+  .lp-ico{width:48px;height:48px;border:1px solid var(--border);display:grid;place-items:center;margin-bottom:20px;color:var(--blue-light)}
+  .lp-ico svg{width:26px;height:26px}
+  .price-card .program-tag{align-self:flex-start}
+  .price-card{display:flex;flex-direction:column}
+  .price-amount span{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);margin-left:4px;letter-spacing:0}
 
   /* ── FAQ ── */
   .faq-list{margin-top:58px;display:grid;grid-template-columns:1fr 1fr;gap:2px;background:var(--border);border:1px solid var(--border)}
@@ -325,35 +331,38 @@
   </div>
 </div>
 
-<!-- ── PROGRAMS ── -->
+<!-- ── LESSONS & PRICING ── -->
 <section id="programs">
   <div class="fade-up">
-    <div class="section-label">Lesson Options</div>
+    <div class="section-label">Lessons &amp; Pricing</div>
     <h2 class="section-title">CHOOSE THE<br>RIGHT FIT</h2>
-    <p class="section-sub">Simple options for athletes who need one-on-one attention, want to train with a friend, or prefer a small group lesson.</p>
+    <p class="section-sub">Most lessons are 30 minutes. Longer sessions available on request. Shared and group athletes should be similar in age and skill level.</p>
   </div>
 
-  <div class="programs-grid fade-up">
-    <div class="program-card">
-      <span class="program-icon">🤸</span>
+  <div class="pricing-grid fade-up" id="pricing">
+    <div class="price-card">
+      
+      <div class="lp-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7" r="3.2"/><path d="M5.5 20c.8-3.6 3.3-5.6 6.5-5.6s5.7 2 6.5 5.6"/></svg></div>
       <span class="program-tag">1 Athlete</span>
-      <div class="program-name">Private Lesson</div>
-      <div class="program-desc">Best for focused corrections, confidence building, mental block support, or skill-specific technique work.</div>
-      <div class="program-price">From $40 · 30 minutes</div>
+      <div class="price-type">Private</div>
+      <div class="price-desc">Focused corrections, mental block work, and skill-specific technique.</div>
+      <div class="price-rows"><div class="price-row"><span class="price-duration">30 min</span><span class="price-amount">$40</span></div><div class="price-row"><span class="price-duration">45 min <small>on request</small></span><span class="price-amount">$60</span></div><div class="price-row"><span class="price-duration">60 min <small>on request</small></span><span class="price-amount">$80</span></div></div>
     </div>
-    <div class="program-card">
-      <span class="program-icon">👯</span>
+    <div class="price-card featured">
+      <div class="featured-tag">Great Value</div>
+      <div class="lp-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="8.5" cy="8" r="2.8"/><circle cx="16" cy="8" r="2.8"/><path d="M3 19.5c.6-3 2.7-4.8 5.5-4.8 1.5 0 2.8.5 3.7 1.4"/><path d="M11.5 19.5c.6-3 2.4-4.8 4.5-4.8s3.9 1.8 4.5 4.8"/></svg></div>
       <span class="program-tag">2 Athletes</span>
-      <div class="program-name">Shared Lesson</div>
-      <div class="program-desc">Great for friends or siblings with similar age and skill level. Athletes still get direct feedback and strong reps.</div>
-      <div class="program-price">From $30 each · 30 minutes</div>
+      <div class="price-type">Shared</div>
+      <div class="price-desc">Train with a friend or sibling. Both still get direct feedback and strong reps.</div>
+      <div class="price-rows"><div class="price-row"><span class="price-duration">30 min</span><span class="price-amount">$30<span>each</span></span></div><div class="price-row"><span class="price-duration">45 min <small>on request</small></span><span class="price-amount">$45<span>each</span></span></div><div class="price-row"><span class="price-duration">60 min <small>on request</small></span><span class="price-amount">$60<span>each</span></span></div></div>
     </div>
-    <div class="program-card">
-      <span class="program-icon">⭐</span>
+    <div class="price-card">
+      
+      <div class="lp-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="6.5" r="2.5"/><circle cx="5.5" cy="9.5" r="2.2"/><circle cx="18.5" cy="9.5" r="2.2"/><path d="M8 20c.5-3 2-4.6 4-4.6s3.5 1.6 4 4.6"/><path d="M1.8 19c.4-2.3 1.7-3.6 3.7-3.6M22.2 19c-.4-2.3-1.7-3.6-3.7-3.6"/></svg></div>
       <span class="program-tag">3 Athletes</span>
-      <div class="program-name">Small Group Lesson</div>
-      <div class="program-desc">A value option when three athletes are close in level. Small enough to keep coaching quality high.</div>
-      <div class="program-price">From $25 each · 30 minutes</div>
+      <div class="price-type">Small Group</div>
+      <div class="price-desc">Best value when three athletes are close in level. Small enough to keep coaching sharp.</div>
+      <div class="price-rows"><div class="price-row"><span class="price-duration">30 min</span><span class="price-amount">$25<span>each</span></span></div><div class="price-row"><span class="price-duration">45 min <small>on request</small></span><span class="price-amount">$35<span>each</span></span></div><div class="price-row"><span class="price-duration">60 min <small>on request</small></span><span class="price-amount">$45<span>each</span></span></div></div>
     </div>
   </div>
 </section>
@@ -465,46 +474,6 @@
   <h2>READY TO BOOK A LESSON WITH COACH STEVE?</h2>
   <a href="https://script.google.com/macros/s/AKfycbw8rGTG1sSW0uo0h5tW83REJUTQuRndEFJ62mqqBDskYaeH42a-QEppGZdhYkPHtUdBaw/exec" target="_blank" class="btn-dark">Book a Lesson →</a>
 </div>
-
-<!-- ── PRICING ── -->
-<section id="pricing">
-  <div class="fade-up">
-    <div class="section-label">Rates</div>
-    <h2 class="section-title">CLEAR<br>PRICING</h2>
-    <p class="section-sub">Most sessions are 30 minutes. Extended sessions available upon request, based on availability. Groups should be similar age and skill level.</p>
-  </div>
-
-  <div class="pricing-grid fade-up">
-    <div class="price-card">
-      <div class="price-type">Private</div>
-      <div class="price-desc">1 athlete with Coach Steve</div>
-      <div class="price-rows">
-        <div class="price-row"><span class="price-duration">30 min</span><span class="price-amount">$40</span></div>
-        <div class="price-row"><span class="price-duration">45 min <small>upon request</small></span><span class="price-amount">$60</span></div>
-        <div class="price-row"><span class="price-duration">60 min <small>upon request</small></span><span class="price-amount">$80</span></div>
-      </div>
-    </div>
-    <div class="price-card featured">
-      <div class="featured-tag">Great Value</div>
-      <div class="price-type">Shared</div>
-      <div class="price-desc">2 athletes — price per athlete</div>
-      <div class="price-rows">
-        <div class="price-row"><span class="price-duration">30 min</span><span class="price-amount">$30</span></div>
-        <div class="price-row"><span class="price-duration">45 min <small>upon request</small></span><span class="price-amount">$45</span></div>
-        <div class="price-row"><span class="price-duration">60 min <small>upon request</small></span><span class="price-amount">$60</span></div>
-      </div>
-    </div>
-    <div class="price-card">
-      <div class="price-type">Small Group</div>
-      <div class="price-desc">3 athletes — price per athlete</div>
-      <div class="price-rows">
-        <div class="price-row"><span class="price-duration">30 min</span><span class="price-amount">$25</span></div>
-        <div class="price-row"><span class="price-duration">45 min <small>upon request</small></span><span class="price-amount">$35</span></div>
-        <div class="price-row"><span class="price-duration">60 min <small>upon request</small></span><span class="price-amount">$45</span></div>
-      </div>
-    </div>
-  </div>
-</section>
 
 <!-- ── PAYMENTS ── -->
 <section id="payments">
