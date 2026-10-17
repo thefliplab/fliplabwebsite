@@ -97,7 +97,7 @@
 
   /* ── SECTIONS ── */
   section{padding:96px 60px;position:relative}
-  #programs,#schedule,#pricing,#payments{background:var(--surface)}
+  #programs,#schedule,#location,#pricing,#payments{background:var(--surface)}
   .section-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--blue-light);margin-bottom:16px;display:flex;align-items:center;gap:12px}
   .section-label::before{content:'';width:24px;height:1px;background:var(--blue)}
   .section-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(42px,6vw,72px);line-height:1;letter-spacing:2px;margin-bottom:16px}
@@ -149,6 +149,23 @@
   @media(max-width:900px){
     .coach-wrap{grid-template-columns:1fr;gap:40px}
     .coach-img{max-width:380px}
+  }
+
+  /* ── LOCATION ── */
+  .loc-wrap{display:grid;grid-template-columns:1fr 1.2fr;gap:24px;margin-top:58px}
+  .loc-card{background:var(--card-bg);border:1px solid var(--border);padding:36px}
+  .loc-row{display:flex;gap:16px;padding:16px 0;border-bottom:1px solid rgba(255,255,255,.06)}
+  .loc-row:last-of-type{border:none}
+  .loc-ico{width:38px;height:38px;flex:none;border:1px solid var(--border);display:grid;place-items:center;color:var(--blue-light)}
+  .loc-k{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+  .loc-v{font-size:15px;font-weight:600;line-height:1.5}
+  .loc-v small{display:block;font-size:13px;font-weight:400;color:var(--muted);margin-top:4px}
+  .loc-v a{color:var(--blue-light)}
+  .loc-map{width:100%;min-height:360px;border:1px solid var(--border);filter:invert(.9) hue-rotate(180deg)}
+  @media(max-width:900px){
+    .loc-wrap{grid-template-columns:1fr}
+    .loc-card{padding:26px}
+    .loc-map{min-height:280px}
   }
 
   /* ── REGISTER STRIP ── */
@@ -215,6 +232,7 @@
     <li><a href="#programs">Lessons</a></li>
     <li><a href="#pricing">Pricing</a></li>
     <li><a href="#coaches">Coach Steve</a></li>
+    <li><a href="#location">Location</a></li>
     <li><a href="#payments">Pay</a></li>
     <li><a href="https://script.google.com/macros/s/AKfycbw8rGTG1sSW0uo0h5tW83REJUTQuRndEFJ62mqqBDskYaeH42a-QEppGZdhYkPHtUdBaw/exec" target="_blank" class="nav-cta">Book a Lesson</a></li>
   </ul>
@@ -228,6 +246,7 @@
   <a href="#programs" class="mobile-link">Lessons</a>
   <a href="#pricing" class="mobile-link">Pricing</a>
   <a href="#coaches" class="mobile-link">Coach Steve</a>
+  <a href="#location" class="mobile-link">Location</a>
   <a href="#payments" class="mobile-link">Pay</a>
   <a href="https://script.google.com/macros/s/AKfycbw8rGTG1sSW0uo0h5tW83REJUTQuRndEFJ62mqqBDskYaeH42a-QEppGZdhYkPHtUdBaw/exec" target="_blank" class="mobile-cta">Book a Lesson</a>
 </div>
@@ -417,6 +436,27 @@
       <div class="focus"><span>Mental blocks</span><span>Back handsprings</span><span>Tucks &amp; layouts</span><span>Hard-floor tumbling</span></div>
       <a href="https://script.google.com/macros/s/AKfycbw8rGTG1sSW0uo0h5tW83REJUTQuRndEFJ62mqqBDskYaeH42a-QEppGZdhYkPHtUdBaw/exec" target="_blank" class="btn-primary">Book with Coach Steve</a>
     </div>
+  </div>
+</section>
+
+<!-- ── LOCATION ── -->
+<section id="location">
+  <div class="fade-up">
+    <div class="section-label">Where &amp; When</div>
+    <h2 class="section-title">FIND<br>THE LAB</h2>
+    <p class="section-sub">Everything a parent needs before the first lesson.</p>
+  </div>
+  <div class="loc-wrap fade-up">
+    <div class="loc-card">
+      <div class="loc-row"><div class="loc-ico">⌖</div><div><div class="loc-k">Location</div><div class="loc-v">10802 Loveland Madeira Rd<br>Loveland, OH 45140</div></div></div>
+      <div class="loc-row"><div class="loc-ico">◷</div><div><div class="loc-k">Lessons</div><div class="loc-v">Weekday evenings &amp; Sundays<small>Spots fill fast. Check <a href="#schedule">live openings</a> or text to join the waitlist.</small></div></div></div>
+      <div class="loc-row"><div class="loc-ico">✆</div><div><div class="loc-k">Questions</div><div class="loc-v">Text (513) 443-2674<small>Replies 8 AM–5 PM</small></div></div></div>
+      <div class="hero-actions" style="margin-top:22px">
+        <a href="https://www.google.com/maps/dir/?api=1&amp;destination=10802+Loveland+Madeira+Rd,+Loveland,+OH+45140" target="_blank" rel="noopener" class="btn-primary">Get Directions</a>
+        <a href="sms:+15134432674" class="btn-ghost">Text Coach Steve</a>
+      </div>
+    </div>
+    <iframe class="loc-map" title="Flip Lab location map" src="https://maps.google.com/maps?q=10802+Loveland+Madeira+Rd,+Loveland,+OH+45140&amp;z=14&amp;output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
   </div>
 </section>
 
