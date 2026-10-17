@@ -200,6 +200,20 @@
   .price-card{display:flex;flex-direction:column}
   .price-amount span{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);margin-left:4px;letter-spacing:0}
 
+  /* ── SKILL LEVELS / EXTRAS ── */
+  .levels{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:24px}
+  .level{background:var(--card-bg);border:1px solid var(--border);padding:26px}
+  .level-name{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:2px;color:var(--blue-light);margin-bottom:12px}
+  .level-skills{display:flex;flex-wrap:wrap;gap:6px}
+  .level-skills span{font-size:12px;border:1px solid var(--border);padding:5px 10px;border-radius:3px;color:rgba(245,248,255,.8)}
+  .sub-head{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:2px;margin-top:64px}
+  .tryout{margin-top:24px;display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;background:#0d1b2f;border:1px solid var(--blue);border-left:3px solid var(--blue);padding:22px 26px}
+  .tryout b{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:2px;font-weight:400;display:block}
+  .tryout span{font-size:13px;color:var(--muted)}
+  .watch{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:14px;font-size:13px;color:var(--muted)}
+  .watch a{color:var(--blue-light);text-decoration:none;font-weight:700}
+  @media(max-width:900px){.levels{grid-template-columns:1fr}}
+
   /* ── FAQ ── */
   .faq-list{margin-top:58px;display:grid;grid-template-columns:1fr 1fr;gap:2px;background:var(--border);border:1px solid var(--border)}
   .faq-item{border:none}
@@ -362,6 +376,19 @@
       <div class="price-rows"><div class="price-row"><span class="price-duration">30 min</span><span class="price-amount">$25<span>each</span></span></div><div class="price-row"><span class="price-duration">45 min <small>on request</small></span><span class="price-amount">$35<span>each</span></span></div><div class="price-row"><span class="price-duration">60 min <small>on request</small></span><span class="price-amount">$45<span>each</span></span></div></div>
     </div>
   </div>
+  <div class="tryout fade-up">
+    <div><b>TRYOUT PREP</b><span>Clean up skills and build confidence before cheer, dance, or gym tryouts.</span></div>
+    <a href="sms:+15134432674" class="btn-ghost">Text to Plan</a>
+  </div>
+
+  <div class="fade-up">
+    <div class="sub-head">WHAT WE WORK ON</div>
+    <div class="levels">
+      <div class="level"><div class="level-name">Beginner</div><div class="level-skills"><span>Cartwheels</span><span>Round-offs</span><span>Bridges &amp; walkovers</span><span>Back handspring drills</span></div></div>
+      <div class="level"><div class="level-name">Intermediate</div><div class="level-skills"><span>Back handsprings</span><span>Standing BHS</span><span>Round-off BHS</span><span>Aerials</span><span>Tucks</span></div></div>
+      <div class="level"><div class="level-name">Advanced</div><div class="level-skills"><span>Layouts</span><span>Fulls</span><span>Twisting passes</span><span>Standing tucks</span><span>Hard-floor tumbling</span></div></div>
+    </div>
+  </div>
 </section>
 
 <!-- ── HOW IT WORKS ── -->
@@ -376,7 +403,7 @@
     <div class="step fade-up">
       <div class="step-num">01</div>
       <div class="step-title">Book or Text</div>
-      <div class="step-desc">Use the booking button to enter the parent portal, or text Coach Steve with questions.</div>
+      <div class="step-desc">Tap Book a Lesson to pick a time, or text Coach Steve with questions.</div>
     </div>
     <div class="step fade-up">
       <div class="step-num">02</div>
@@ -441,6 +468,7 @@
       </div>
       <div class="focus"><span>Mental blocks</span><span>Back handsprings</span><span>Tucks &amp; layouts</span><span>Hard-floor tumbling</span></div>
       <a href="https://script.google.com/macros/s/AKfycbw8rGTG1sSW0uo0h5tW83REJUTQuRndEFJ62mqqBDskYaeH42a-QEppGZdhYkPHtUdBaw/exec" target="_blank" class="btn-primary">Book with Coach Steve</a>
+      <div class="watch">Watch real lessons: <a href="https://www.instagram.com/fliplab.with.coach.steve" target="_blank" rel="noopener">Instagram →</a> <a href="https://www.facebook.com/share/17i9N9k4op/" target="_blank" rel="noopener">Facebook →</a></div>
     </div>
   </div>
 </section>
@@ -522,6 +550,14 @@
     <div class="faq-item">
       <div class="faq-q">Are Saturdays available?</div>
       <div class="faq-a">Saturdays are unavailable. Communication is generally available 8 AM–5 PM.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">What if we're running late?</div>
+      <div class="faq-a">Please arrive on time. Lessons run back to back, so late arrivals may mean a shorter lesson.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">What if we need to cancel?</div>
+      <div class="faq-a">Text Coach Steve at least 24 hours ahead. Late cancellations and no-shows may be charged.</div>
     </div>
   </div>
 </section>
