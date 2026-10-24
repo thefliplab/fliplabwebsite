@@ -680,10 +680,10 @@
       <div class="schedule-slot">
         <div class="slot-time">—</div>
         <div class="slot-info">
-          <div class="slot-name">No current openings listed</div>
-          <div class="slot-coach">Text Coach Steve for availability</div>
+          <div class="slot-name">Coach Steve's private lesson schedule is currently full</div>
+          <div class="slot-coach">Join the waitlist and we'll reach out as soon as a spot opens</div>
         </div>
-        <span class="slot-badge badge-full">FULL</span>
+        <a href="${PORTAL_BASE}" target="_blank" rel="noopener" class="slot-badge badge-open" style="text-decoration:none">JOIN WAITLIST</a>
       </div>`;
   }
 
@@ -726,8 +726,8 @@
     try {
       const cached = JSON.parse(sessionStorage.getItem(CACHE_KEY) || "null");
       if (cached && (Date.now() - cached.t) < CACHE_TTL_MS && Array.isArray(cached.openings)) {
+        // Show the saved list right away, then always fetch fresh below
         cached.openings.length ? renderSlots(container, cached.openings) : renderEmpty(container);
-        return;
       }
     } catch (_) {}
 
