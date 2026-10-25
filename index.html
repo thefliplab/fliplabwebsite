@@ -295,6 +295,15 @@
     .schedule-slot{grid-template-columns:82px 1fr auto;gap:12px;padding:16px}
     .schedule-header{flex-direction:column;align-items:flex-start}
   }
+  /* ── STICKY MOBILE BAR ── */
+  .sticky-bar{display:none}
+  @media(max-width:900px){
+    .sticky-bar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:90;gap:8px;padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:rgba(5,7,13,.94);backdrop-filter:blur(8px);border-top:1px solid rgba(245,248,255,.12)}
+    .sticky-bar a{flex:1;text-align:center;padding:13px 8px;border-radius:4px;font-weight:700;font-size:15px;text-decoration:none}
+    .sticky-bar .sb-book{background:var(--blue);color:#03101f}
+    .sticky-bar .sb-text{border:1px solid rgba(245,248,255,.3);color:var(--white)}
+    body{padding-bottom:76px}
+  }
 </style>
 </head>
 <body>
@@ -786,5 +795,9 @@
 
   loadOpenings();
 </script>
+<div class="sticky-bar">
+  <a href="/book" target="_blank" rel="noopener" class="sb-book">Book a Lesson</a>
+  <a href="sms:+15134432674" class="sb-text">Text Coach Steve</a>
+</div>
 </body>
 </html>
