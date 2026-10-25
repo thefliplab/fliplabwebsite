@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Book a Lesson · Flip Lab with Coach Steve</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<script>
+  // Where to send people. PAGE_PARAM is set on /portal.
+  var APP = "https://script.google.com/macros/s/AKfycbw8rGTG1sSW0uo0h5tW83REJUTQuRndEFJ62mqqBDskYaeH42a-QEppGZdhYkPHtUdBaw/exec";
+  var PAGE_PARAM = window.PAGE_PARAM || "";
+  var q = location.search.replace(/^\?/, "");
+  var parts = [PAGE_PARAM, q].filter(Boolean).join("&");
+  var TARGET = APP + (parts ? "?" + parts : "");
+  var ua = navigator.userAgent || "";
+  var inApp = /Instagram|FBAN|FBAV|FB_IAB|FBIOS|Messenger|TikTok|musical_ly|Bytedance|Snapchat|Line\//i.test(ua);
+  var android = /Android/i.test(ua);
+  if (!inApp) {
+    location.replace(TARGET);
+  } else if (android) {
+    // Hand off to Chrome
+    location.href = "intent://" + TARGET.replace(/^https:\/\//, "") + "#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url=" + encodeURIComponent(TARGET) + ";end";
+  }
+</script>
+<style>
+  :root{--bg:#05070d;--surface:#0b1020;--blue:#1e8cff;--blue-light:#63b3ff;--white:#f5f8ff;--muted:#a6b0c3}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--white);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px 16px}
+  .card{max-width:420px;width:100%;background:var(--surface);border:1px solid rgba(245,248,255,.12);border-radius:10px;padding:28px 22px;text-align:center}
+  img{width:220px;max-width:70%;margin-bottom:18px}
+  h1{font-size:22px;margin-bottom:10px}
+  p{color:var(--muted);font-size:15px;line-height:1.5}
+  ol{text-align:left;margin:20px 0;padding-left:22px;line-height:1.6;font-size:16px}
+  ol li{margin-bottom:8px}
+  b{color:var(--white)}
+  .dots{display:inline-block;background:#1b2440;border-radius:4px;padding:0 6px;font-weight:700;letter-spacing:1px}
+  .arrow{position:fixed;top:6px;right:14px;font-size:34px;color:var(--blue-light);animation:bob 1.2s ease-in-out infinite}
+  @keyframes bob{50%{transform:translateY(6px)}}
+  button,a.btn{display:block;width:100%;padding:14px;border-radius:6px;font-size:16px;font-weight:700;border:none;margin-top:12px;text-decoration:none;cursor:pointer}
+  .primary{background:var(--blue);color:#03101f}
+  .ghost{background:transparent;color:var(--white);border:1px solid rgba(245,248,255,.3)!important}
+  .ok{color:var(--blue-light);font-size:14px;margin-top:8px;min-height:18px}
+  .loading{display:none}
+</style>
+</head>
+<body>
+<div class="arrow" id="arrow">↗</div>
+<div class="card" id="help">
+  <img src="/images/logo.png" alt="Flip Lab with Coach Steve">
+  <h1>Open in your browser to book</h1>
+  <p id="why">This app's built-in browser can't load our booking page. It only takes a second:</p>
+  <ol id="steps">
+    <li>Tap <span class="dots">•••</span> in the top-right corner</li>
+    <li>Choose <b id="openWord">Open in external browser</b></li>
+  </ol>
+  <p>Or copy the link and paste it into Safari:</p>
+  <button class="primary" id="copy">Copy booking link</button>
+  <div class="ok" id="ok"></div>
+  <a class="btn ghost" href="sms:+15134432674">Text Coach Steve instead</a>
+</div>
+<script>
+  if (!inApp) {
+    document.getElementById("help").innerHTML = '<p>Opening booking…</p><a class="btn primary" href="' + TARGET + '">Tap here if it doesn\'t open</a>';
+    document.getElementById("arrow").style.display = "none";
+  } else {
+    if (/iPhone|iPad|iPod/i.test(ua)) {
+      document.getElementById("openWord").textContent = /FBAN|FBAV|FBIOS|FB_IAB/i.test(ua) ? "Open in external browser" : "Open in external browser (or Open in Safari)";
+    } else if (android) {
+      document.getElementById("why").textContent = "If Chrome didn't open, it only takes a second:";
+      document.getElementById("openWord").textContent = "Open in Chrome";
+    }
+    document.getElementById("copy").onclick = function () {
+      var done = function () { document.getElementById("ok").textContent = "Copied! Open Safari and paste it in the address bar."; };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(TARGET).then(done, function () { window.prompt("Copy this link:", TARGET); });
+      } else { window.prompt("Copy this link:", TARGET); }
+    };
+  }
+</script>
+</body>
+</html>
