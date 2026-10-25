@@ -295,6 +295,15 @@
     .schedule-slot{grid-template-columns:82px 1fr auto;gap:12px;padding:16px}
     .schedule-header{flex-direction:column;align-items:flex-start}
   }
+  /* ── STICKY MOBILE BAR ── */
+  .sticky-bar{display:none}
+  @media(max-width:900px){
+    .sticky-bar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:90;gap:8px;padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:rgba(5,7,13,.94);backdrop-filter:blur(8px);border-top:1px solid rgba(245,248,255,.12)}
+    .sticky-bar a{flex:1;text-align:center;padding:13px 8px;border-radius:4px;font-weight:700;font-size:15px;text-decoration:none}
+    .sticky-bar .sb-book{background:var(--blue);color:#03101f}
+    .sticky-bar .sb-text{border:1px solid rgba(245,248,255,.3);color:var(--white)}
+    body{padding-bottom:76px}
+  }
 </style>
 </head>
 <body>
@@ -307,7 +316,7 @@
     <li><a href="#coaches">Coach Steve</a></li>
     <li><a href="#location">Location</a></li>
     <li><a href="#payments">Pay</a></li>
-    <li><a href="https://script.google.com/macros/s/AKfycbw8rGTG1sSW0uo0h5tW83REJUTQuRndEFJ62mqqBDskYaeH42a-QEppGZdhYkPHtUdBaw/exec" target="_blank" class="nav-cta">Book a Lesson</a></li>
+    <li><a href="/book" target="_blank" class="nav-cta">Book a Lesson</a></li>
   </ul>
   <button class="nav-hamburger" id="hamburger" aria-label="Open menu">
     <span></span><span></span><span></span>
@@ -320,7 +329,7 @@
   <a href="#coaches" class="mobile-link">Coach Steve</a>
   <a href="#location" class="mobile-link">Location</a>
   <a href="#payments" class="mobile-link">Pay</a>
-  <a href="https://script.google.com/macros/s/AKfycbw8rGTG1sSW0uo0h5tW83REJUTQuRndEFJ62mqqBDskYaeH42a-QEppGZdhYkPHtUdBaw/exec" target="_blank" class="mobile-cta">Book a Lesson</a>
+  <a href="/book" target="_blank" class="mobile-cta">Book a Lesson</a>
 </div>
 
 <!-- ── HERO ── -->
@@ -346,7 +355,7 @@
       Focused tumbling lessons with Coach Steve for athletes who need confidence, cleaner technique, and real coaching that transfers to performance.
     </p>
     <div class="hero-actions">
-      <a href="https://script.google.com/macros/s/AKfycbw8rGTG1sSW0uo0h5tW83REJUTQuRndEFJ62mqqBDskYaeH42a-QEppGZdhYkPHtUdBaw/exec" target="_blank" class="btn-primary">Book a Lesson</a>
+      <a href="/book" target="_blank" class="btn-primary">Book a Lesson</a>
       <a href="sms:+15134432674" class="btn-ghost">Text Coach Steve</a>
     </div>
 
@@ -481,6 +490,7 @@
   <div class="fade-up">
     <div class="sub-head">SEE IT IN ACTION</div>
     <div class="ig-grid">
+      <video src="videos/promo.mp4" poster="images/promo.jpg" controls playsinline preload="none"></video>
       <video src="videos/lesson-1.mp4" poster="images/lesson-1.jpg" controls playsinline preload="none"></video>
     </div>
   </div>
@@ -571,7 +581,7 @@
 <!-- ── REGISTER STRIP ── -->
 <div class="register-strip fade-up">
   <h2>READY TO BOOK A LESSON WITH COACH STEVE?</h2>
-  <a href="https://script.google.com/macros/s/AKfycbw8rGTG1sSW0uo0h5tW83REJUTQuRndEFJ62mqqBDskYaeH42a-QEppGZdhYkPHtUdBaw/exec" target="_blank" class="btn-dark">Book a Lesson →</a>
+  <a href="/book" target="_blank" class="btn-dark">Book a Lesson →</a>
 </div>
 
 <!-- ── PAYMENTS ── -->
@@ -645,7 +655,7 @@
   <div class="footer-col">
     <h4>Actions</h4>
     <ul>
-      <li><a href="https://script.google.com/macros/s/AKfycbw8rGTG1sSW0uo0h5tW83REJUTQuRndEFJ62mqqBDskYaeH42a-QEppGZdhYkPHtUdBaw/exec" target="_blank">Book a Lesson</a></li>
+      <li><a href="/book" target="_blank">Book a Lesson</a></li>
       <li><a href="sms:+15134432674">Text Coach Steve</a></li>
       <li><a href="https://venmo.com/code?user_id=2634245503713280412&created=1778007886" target="_blank">Pay Venmo</a></li>
     </ul>
@@ -786,5 +796,9 @@
 
   loadOpenings();
 </script>
+<div class="sticky-bar">
+  <a href="/book" target="_blank" rel="noopener" class="sb-book">Book a Lesson</a>
+  <a href="sms:+15134432674" class="sb-text">Text Coach Steve</a>
+</div>
 </body>
 </html>
