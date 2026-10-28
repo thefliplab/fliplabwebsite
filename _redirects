@@ -1,2 +1,8 @@
 # /book and /portal are small pages (book/index.html, portal/index.html)
 # that open the Google booking app, with help for Instagram/Facebook browsers.
+
+# Keep code/config files from being viewable as web pages
+/netlify/*        /  404!
+/node_modules/*   /  404!
+/package.json     /  404!
+/package-lock.json /  404!

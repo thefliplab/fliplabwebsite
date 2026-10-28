@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Reviews · Flip Lab Admin</title>
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#05070d;--blue:#1e8cff;--blue-light:#63b3ff;--white:#f5f8ff;--muted:#8b97ad;--border:rgba(30,140,255,.22);--card:#101827}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--white);font-family:'DM Sans',sans-serif;font-weight:300;min-height:100vh;padding:28px 16px 60px}
+.wrap{max-width:640px;margin:0 auto}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:6px}
+h1{font-family:'Bebas Neue',sans-serif;font-weight:400;font-size:44px;letter-spacing:2px;line-height:1}
+.out{background:none;border:1px solid var(--border);color:var(--muted);border-radius:4px;padding:7px 12px;font:12px 'DM Sans',sans-serif;cursor:pointer}
+.sub{font-size:14px;color:rgba(245,248,255,.6);line-height:1.6;margin-bottom:8px}
+.sect{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;margin:28px 0 12px;color:var(--muted)}
+.item{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:18px;margin-bottom:12px}
+.item .row{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+.who{font-weight:800}.meta{font:10px 'DM Mono',monospace;color:var(--muted);letter-spacing:1px;text-transform:uppercase}
+.st{color:var(--blue-light);letter-spacing:2px}
+.item p{font-size:14px;line-height:1.65;color:rgba(245,248,255,.85);white-space:pre-wrap}
+.pill{display:inline-block;font:10px 'DM Mono',monospace;letter-spacing:1px;text-transform:uppercase;padding:3px 9px;border-radius:3px;margin-left:8px;vertical-align:middle}
+.p-new{background:#3a2f0a;color:#ffd34d}.p-live{background:rgba(30,140,255,.16);color:var(--blue-light)}.p-hid{background:rgba(255,255,255,.06);color:var(--muted)}
+.actions{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+.actions button{flex:1;min-width:110px;padding:11px;border-radius:4px;font:800 12px 'DM Sans',sans-serif;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--white)}
+.actions .ok{background:var(--blue);color:#03101f;border-color:var(--blue)}
+.actions .del{color:#ff8a8a;border-color:rgba(255,138,138,.35)}
+.actions button:disabled{opacity:.5;cursor:wait}
+.empty{color:var(--muted);font-size:14px;padding:18px;text-align:center;border:1px dashed var(--border);border-radius:6px}
+.login{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:24px;margin-top:22px}
+.login label{font:10px 'DM Mono',monospace;letter-spacing:2px;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:8px}
+.login input{width:100%;background:#0a0f1c;border:1px solid var(--border);color:var(--white);border-radius:6px;padding:12px;font:16px 'DM Sans',sans-serif}
+.login button{display:block;width:100%;margin-top:16px;padding:14px;border:none;border-radius:4px;background:var(--blue);color:#03101f;font:800 13px 'DM Sans',sans-serif;letter-spacing:1.4px;text-transform:uppercase;cursor:pointer}
+.err{color:#ff8a8a;font-size:14px;margin-top:12px;display:none}
+.link{margin-top:20px;font-size:13px;color:var(--muted);line-height:1.6}
+.link code{background:#0a0f1c;border:1px solid var(--border);padding:2px 6px;border-radius:4px;color:var(--blue-light)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <h1>Reviews</h1>
+    <button class="out" id="logout" style="display:none" onclick="logout()">Log out</button>
+  </div>
+  <p class="sub">New reviews wait here until you approve them. Only approved reviews show on the website.</p>
+
+  <div class="login" id="loginBox">
+    <label for="pw">Password</label>
+    <input type="password" id="pw" autocomplete="current-password" onkeydown="if(event.key==='Enter')login()">
+    <button onclick="login()">Open Reviews</button>
+    <div class="err" id="loginErr">Wrong password.</div>
+  </div>
+
+  <div id="panel" style="display:none">
+    <div class="sect">Waiting for approval</div>
+    <div id="pending"></div>
+    <div class="sect">On the website</div>
+    <div id="approved"></div>
+    <div class="sect">Hidden</div>
+    <div id="hidden"></div>
+    <p class="link">Review link to text parents: <code>fliplabcoachsteve.com/review</code></p>
+  </div>
+</div>
+
+<script>
+var KEY = '';
+var REVIEWS = [];
+try { KEY = localStorage.getItem('fl_reviews_key') || ''; } catch (e) {}
+
+function api(method, body) {
+  return fetch('/api/reviews-admin', {
+    method: method,
+    headers: { 'content-type': 'application/json', 'x-admin-key': KEY },
+    body: body ? JSON.stringify(body) : undefined
+  }).then(function(r) {
+    if (r.status === 401) throw new Error('auth');
+    return r.json();
+  });
+}
+function esc(s) {
+  return String(s == null ? '' : s).replace(/[&<>"']/g, function(c) {
+    return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c];
+  });
+}
+function login() {
+  KEY = document.getElementById('pw').value;
+  load(true);
+}
+function logout() {
+  KEY = '';
+  try { localStorage.removeItem('fl_reviews_key'); } catch (e) {}
+  document.getElementById('panel').style.display = 'none';
+  document.getElementById('logout').style.display = 'none';
+  document.getElementById('loginBox').style.display = 'block';
+}
+function load(fromLogin) {
+  if (!KEY) return;
+  api('GET').then(function(res) {
+    try { localStorage.setItem('fl_reviews_key', KEY); } catch (e) {}
+    REVIEWS = res.reviews || [];
+    document.getElementById('loginBox').style.display = 'none';
+    document.getElementById('panel').style.display = 'block';
+    document.getElementById('logout').style.display = 'inline-block';
+    render();
+  }).catch(function(e) {
+    if (e.message === 'auth') {
+      try { localStorage.removeItem('fl_reviews_key'); } catch (x) {}
+      if (fromLogin) document.getElementById('loginErr').style.display = 'block';
+    } else {
+      alert('Could not load reviews. Check your connection and try again.');
+    }
+  });
+}
+function card(r) {
+  var stars = '★★★★★'.slice(0, r.rating) + '☆☆☆☆☆'.slice(0, 5 - r.rating);
+  var pill = r.status === 'approved' ? '<span class="pill p-live">Live</span>'
+           : r.status === 'hidden'   ? '<span class="pill p-hid">Hidden</span>'
+           : '<span class="pill p-new">New</span>';
+  var date = r.created ? new Date(r.created).toLocaleDateString() : '';
+  var btns;
+  if (r.status === 'pending') {
+    btns = '<button class="ok" onclick="act(this,\'' + r.id + '\',\'approved\')">Approve</button>'
+         + '<button onclick="act(this,\'' + r.id + '\',\'hidden\')">Hide</button>';
+  } else if (r.status === 'approved') {
+    btns = '<button onclick="act(this,\'' + r.id + '\',\'hidden\')">Remove from website</button>';
+  } else {
+    btns = '<button class="ok" onclick="act(this,\'' + r.id + '\',\'approved\')">Approve</button>'
+         + '<button class="del" onclick="del(this,\'' + r.id + '\')">Delete forever</button>';
+  }
+  return '<div class="item"><div class="row"><div><span class="who">' + esc(r.name) + '</span> <span class="meta">· ' + esc(r.sport) + ' · ' + esc(date) + '</span>' + pill + '</div><span class="st">' + stars + '</span></div>'
+    + '<p>' + esc(r.text) + '</p><div class="actions">' + btns + '</div></div>';
+}
+function render() {
+  var groups = { pending: '', approved: '', hidden: '' };
+  REVIEWS.forEach(function(r) { groups[r.status] = (groups[r.status] || '') + card(r); });
+  document.getElementById('pending').innerHTML  = groups.pending  || '<div class="empty">All caught up. No new reviews.</div>';
+  document.getElementById('approved').innerHTML = groups.approved || '<div class="empty">No reviews on the website yet.</div>';
+  document.getElementById('hidden').innerHTML   = groups.hidden   || '<div class="empty">Nothing hidden.</div>';
+}
+function act(btn, id, status) {
+  btn.disabled = true;
+  api('POST', { id: id, status: status }).then(function(res) {
+    if (!res.ok) throw new Error(res.error);
+    REVIEWS.forEach(function(r) { if (r.id === id) r.status = status; });
+    render();
+  }).catch(function() { btn.disabled = false; alert('That did not save. Please try again.'); });
+}
+function del(btn, id) {
+  if (!confirm('Delete this review forever?')) return;
+  btn.disabled = true;
+  api('POST', { id: id, action: 'delete' }).then(function(res) {
+    if (!res.ok) throw new Error(res.error);
+    REVIEWS = REVIEWS.filter(function(r) { return r.id !== id; });
+    render();
+  }).catch(function() { btn.disabled = false; alert('That did not delete. Please try again.'); });
+}
+load(false);
+</script>
+</body>
+</html>
