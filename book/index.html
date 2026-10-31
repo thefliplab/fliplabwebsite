@@ -16,9 +16,8 @@
   var ua = navigator.userAgent || "";
   var inApp = /Instagram|FBAN|FBAV|FB_IAB|FBIOS|Messenger|TikTok|musical_ly|Bytedance|Snapchat|Line\//i.test(ua);
   var android = /Android/i.test(ua);
-  if (!inApp) {
-    location.replace(TARGET);
-  } else if (android) {
+  // Normal browsers: booking page is shown inside this page (see below), so no redirect.
+  if (inApp && android) {
     // Hand off to Chrome
     location.href = "intent://" + TARGET.replace(/^https:\/\//, "") + "#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url=" + encodeURIComponent(TARGET) + ";end";
   }
@@ -61,8 +60,16 @@
 </div>
 <script>
   if (!inApp) {
-    document.getElementById("help").innerHTML = '<p>Opening booking…</p><a class="btn primary" href="' + TARGET + '">Tap here if it doesn\'t open</a>';
+    // Show the booking app inside this page so families stay on fliplabcoachsteve.com
+    // (also hides Google's "created by a Google Apps Script user" banner)
+    document.getElementById("help").style.display = "none";
     document.getElementById("arrow").style.display = "none";
+    var f = document.createElement("iframe");
+    f.src = TARGET;
+    f.title = "Book a Lesson";
+    f.setAttribute("allow", "clipboard-write");
+    f.style.cssText = "position:fixed;inset:0;width:100%;height:100%;border:0;background:#f5f4f0";
+    document.body.appendChild(f);
   } else {
     if (/iPhone|iPad|iPod/i.test(ua)) {
       document.getElementById("openWord").textContent = /FBAN|FBAV|FBIOS|FB_IAB/i.test(ua) ? "Open in external browser" : "Open in external browser (or Open in Safari)";
