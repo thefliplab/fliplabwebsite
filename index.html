@@ -286,6 +286,28 @@
   .fade-up{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease}
   .fade-up.visible{opacity:1;transform:translateY(0)}
 
+
+  /* ── ASK A QUESTION ── */
+  #ask{background:var(--surface)}
+  .ask-wrap{display:grid;grid-template-columns:1fr 1.3fr;gap:60px;align-items:start}
+  .ask-note{margin-top:28px;font-size:13px;color:var(--muted);line-height:1.7}
+  .ask-note a{color:var(--blue-light)}
+  .ask-form{background:var(--card-bg);border:1px solid var(--border);padding:36px;display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  .ask-form .full{grid-column:1/-1}
+  .ask-form label{display:block;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+  .ask-form input,.ask-form textarea{width:100%;background:var(--bg);border:1px solid rgba(245,248,255,.14);border-radius:4px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:16px;padding:13px 14px;transition:border-color .2s}
+  .ask-form input:focus,.ask-form textarea:focus{outline:none;border-color:var(--blue)}
+  .ask-form textarea{min-height:140px;resize:vertical}
+  .ask-form button{justify-self:start}
+  .ask-form button:disabled{opacity:.6;cursor:wait}
+  .ask-hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+  .ask-status{font-size:14px;line-height:1.6}
+  .ask-status.err{color:#ff8a8a}
+  .ask-done{background:var(--card-bg);border:1px solid rgba(99,179,255,.55);padding:36px;display:none}
+  .ask-done h3{font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:2px;margin-bottom:10px}
+  .ask-done p{color:rgba(245,248,255,.7);line-height:1.7}
+  @media(max-width:900px){.ask-wrap{grid-template-columns:1fr;gap:32px}.ask-form{grid-template-columns:1fr;padding:24px}}
+
   /* ── RESPONSIVE ── */
   @media(max-width:900px){
     nav{padding:15px 22px}
@@ -328,6 +350,7 @@
     <li><a href="#coaches">Coach Steve</a></li>
     <li><a href="#location">Location</a></li>
     <li><a href="#payments">Pay</a></li>
+    <li><a href="#ask">Ask</a></li>
     <li><a href="/book" target="_blank" class="nav-cta">Book a Lesson</a></li>
   </ul>
   <button class="nav-hamburger" id="hamburger" aria-label="Open menu">
@@ -341,6 +364,7 @@
   <a href="#coaches" class="mobile-link">Coach Steve</a>
   <a href="#location" class="mobile-link">Location</a>
   <a href="#payments" class="mobile-link">Pay</a>
+  <a href="#ask" class="mobile-link">Ask a Question</a>
   <a href="/book" target="_blank" class="mobile-cta">Book a Lesson</a>
 </div>
 
@@ -667,6 +691,54 @@
   </div>
 </section>
 
+<!-- ── ASK A QUESTION ── -->
+<section id="ask">
+  <div class="ask-wrap">
+    <div class="fade-up">
+      <div class="section-label">Still Have Questions?</div>
+      <h2 class="section-title">ASK<br>COACH STEVE</h2>
+      <p class="section-sub">Not sure which lesson fits, wondering about a skill, or want to talk through a mental block? Send a question and Coach Steve will email you back.</p>
+      <p class="ask-note">Replies usually come within a day. Need an answer right now? <a href="sms:+15134432674">Text (513) 443-2674</a>.</p>
+    </div>
+
+    <div class="fade-up">
+      <form class="ask-form" id="askForm" name="ask-coach-steve" method="POST" action="/" data-netlify="true" netlify-honeypot="bot-field">
+        <input type="hidden" name="form-name" value="ask-coach-steve">
+        <input type="hidden" name="subject" value="New question from fliplabcoachsteve.com">
+        <p class="ask-hp" aria-hidden="true"><label>Leave this empty <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
+        <div>
+          <label for="ask-name">Your name</label>
+          <input id="ask-name" type="text" name="name" required autocomplete="name">
+        </div>
+        <div>
+          <label for="ask-email">Your email</label>
+          <input id="ask-email" type="email" name="email" required autocomplete="email">
+        </div>
+        <div>
+          <label for="ask-phone">Phone (optional)</label>
+          <input id="ask-phone" type="tel" name="phone" autocomplete="tel">
+        </div>
+        <div>
+          <label for="ask-athlete">Athlete name &amp; age (optional)</label>
+          <input id="ask-athlete" type="text" name="athlete">
+        </div>
+        <div class="full">
+          <label for="ask-question">Your question</label>
+          <textarea id="ask-question" name="question" required></textarea>
+        </div>
+        <div class="full">
+          <button type="submit" class="btn-primary" id="askSubmit">Send Question</button>
+        </div>
+        <div class="full ask-status" id="askStatus" role="status" aria-live="polite"></div>
+      </form>
+      <div class="ask-done" id="askDone" role="status" aria-live="polite">
+        <h3>THANKS, YOUR QUESTION IS IN!</h3>
+        <p>Coach Steve will email you back soon. If it's urgent, <a href="sms:+15134432674" style="color:var(--blue-light)">text (513) 443-2674</a>.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ── FOOTER ── -->
 <footer>
   <div>
@@ -678,6 +750,7 @@
     <ul>
       <li><a href="/book" target="_blank">Book a Lesson</a></li>
       <li><a href="sms:+15134432674">Text Coach Steve</a></li>
+      <li><a href="#ask">Ask a Question</a></li>
       <li><a href="https://venmo.com/code?user_id=2634245503713280412&created=1778007886" target="_blank">Pay Venmo</a></li>
     </ul>
   </div>
@@ -844,5 +917,20 @@
   <a href="sms:+15134432674" class="sb-text">Text Coach Steve</a>
 </div>
 <script data-goatcounter="https://fliplabcoachsteve.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+<script>
+  // ── ASK A QUESTION (Netlify Forms, sent without leaving the page) ──
+  (function(){
+    var form=document.getElementById('askForm'); if(!form) return;
+    var btn=document.getElementById('askSubmit'), status=document.getElementById('askStatus'), done=document.getElementById('askDone');
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      status.textContent=''; status.className='full ask-status';
+      btn.disabled=true; btn.textContent='Sending…';
+      fetch('/', {method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded'}, body:new URLSearchParams(new FormData(form)).toString()})
+        .then(function(r){ if(!r.ok) throw new Error(r.status); form.style.display='none'; done.style.display='block'; })
+        .catch(function(){ status.className='full ask-status err'; status.innerHTML='Sorry, that didn\'t send. Please try again or <a href="sms:+15134432674" style="color:var(--blue-light)">text Coach Steve</a>.'; btn.disabled=false; btn.textContent='Send Question'; });
+    });
+  })();
+</script>
 </body>
 </html>
