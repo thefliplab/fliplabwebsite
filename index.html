@@ -727,8 +727,10 @@
   observeFadeUps();
 
   // ── OPENINGS / SCHEDULE ──
-  const OPENINGS_API = "https://script.google.com/macros/s/AKfycbw8rGTG1sSW0uo0h5tW83REJUTQuRndEFJ62mqqBDskYaeH42a-QEppGZdhYkPHtUdBaw/exec?action=openings";
-  const CACHE_KEY = "fliplab_openings_v1";
+  // Open slots come from FlipLab 3.0 (same list the sign-up page uses)
+  const OPENINGS_API = "https://angmtyojkwlrefxpcgoa.supabase.co/rest/v1/rpc/signup_slots";
+  const OPENINGS_KEY = "sb_publishable_fPciNfnNHpHQikB8mqHNpw_hIVRIGo5";
+  const CACHE_KEY = "fliplab_openings_v3";
   const CACHE_TTL_MS = 5 * 60 * 1000;
   const PORTAL_BASE = "/book";
 
@@ -800,9 +802,15 @@
     } catch (_) {}
 
     try {
-      const response = await fetch(OPENINGS_API, { cache: "no-store" });
-      const data = await response.json();
-      if (!data.success || !Array.isArray(data.openings) || !data.openings.length) {
+      const response = await fetch(OPENINGS_API, {
+        method: "POST", cache: "no-store",
+        headers: { "Content-Type": "application/json", apikey: OPENINGS_KEY, Authorization: "Bearer " + OPENINGS_KEY },
+        body: JSON.stringify({ p_slug: "fliplab" })
+      });
+      if (!response.ok) throw new Error("HTTP " + response.status);
+      const raw = await response.json();
+      const data = { success: true, openings: ((raw && raw.slots) || []).filter(s => !s.taken).map(s => ({ day: s.day, time: s.time, status: "Open" })) };
+      if (!data.openings.length) {
         renderEmpty(container);
         try { sessionStorage.setItem(CACHE_KEY, JSON.stringify({ t: Date.now(), openings: [] })); } catch (_) {}
         return;
