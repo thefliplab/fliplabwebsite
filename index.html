@@ -576,6 +576,13 @@
       <span class="slot-badge badge-open">LIVE</span>
     </div>
   </div>
+
+  <div id="oneoff-wrap" class="fade-up" style="display:none;margin-top:48px">
+    <div class="section-label">One-Time Lessons</div>
+    <h3 class="section-title" style="font-size:clamp(32px,5vw,48px)">THIS WEEK ONLY</h3>
+    <p class="section-sub">A regular student is away, so these times are open once. 30 min, <span id="oneoff-price">$40</span>. Not a weekly spot.</p>
+    <div id="oneoff-slots" class="schedule-slots"></div>
+  </div>
 </section>
 
 <!-- ── LOCATION ── -->
@@ -824,6 +831,38 @@
   }
 
   loadOpenings();
+
+  // ── THIS WEEK ONLY (one-time openings from cancellations, this week + next) ──
+  (async function loadOneOff() {
+    const wrap = document.getElementById("oneoff-wrap"), box = document.getElementById("oneoff-slots");
+    if (!wrap || !box) return;
+    try {
+      const r = await fetch("https://angmtyojkwlrefxpcgoa.supabase.co/functions/v1/public-openings", { cache: "no-store" });
+      if (!r.ok) return;
+      const d = await r.json();
+      const list = [].concat(...((d && d.weeks) || []).map(w => w.slots || []));
+      if (!list.length) return;                       // nothing open → section stays hidden
+      const price = escapeHtml(d.price || "$40");
+      document.getElementById("oneoff-price").textContent = d.price || "$40";
+      const M = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+      box.innerHTML = list.map(s => {
+        const dt = new Date(s.date + "T12:00:00"), short = String(s.day).slice(0, 3);
+        const label = short + ", " + M[dt.getMonth()] + " " + dt.getDate();
+        const msg = "Hi Coach Steve, I'd like the one-time lesson on " + label + " at " + s.time + ".";
+        return `
+        <a href="sms:+15134432674?&body=${encodeURIComponent(msg)}" class="schedule-slot" style="text-decoration:none;color:inherit;cursor:pointer">
+          <div class="slot-time">${escapeHtml(s.time)}</div>
+          <div class="slot-info">
+            <div class="slot-name">${escapeHtml(label)}</div>
+            <div class="slot-coach">One time only · 30 min · ${price}</div>
+          </div>
+          <span class="slot-badge badge-open">TEXT TO BOOK</span>
+        </a>`;
+      }).join("");
+      wrap.style.display = "";
+      observeFadeUps();
+    } catch (e) { console.error("loadOneOff failed:", e); }
+  })();
 
   // ── REVIEWS (approved ones only, from /api/reviews) ──
   (function loadReviews() {
