@@ -7,6 +7,9 @@
 /portal    https://fliplab3-admin.netlify.app/portal.html  302!
 /portal/   https://fliplab3-admin.netlify.app/portal.html  302!
 
+# Short claim links in Openings texts: fliplabcoachsteve.com/c/CODE → FlipLab 3.0 claim page
+/c/:code   https://fliplab3-admin.netlify.app/claim.html?t=:code  302!
+
 
 # Keep code/config files from being viewable as web pages
 /netlify/*        /  404!
